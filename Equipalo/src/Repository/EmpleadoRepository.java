@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Persistencia;
+package Repository;
 
-import equipalo.Conexion;
-import equipalo.entities.Empleados;
-import equipalo.entities.TipoDocumento;
+import Conexion.Conexion;
+import Entities.Empleados;
+import Entities.TipoDocumento;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.PreparedStatement;

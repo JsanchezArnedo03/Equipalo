@@ -4,8 +4,8 @@
  */
 package Vista;
 
-import Logica.SolicitudService;
-import equipalo.entities.Solicitudes;
+import Service.SolicitudService;
+import Entities.Solicitudes;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;

@@ -4,9 +4,9 @@
  */
 package Vista;
 
-import Logica.EmpleadoService;
-import Persistencia.DispositivoRepository;
-import equipalo.entities.Empleados;
+import Service.EmpleadoService;
+import Repository.DispositivoRepository;
+import Entities.Empleados;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

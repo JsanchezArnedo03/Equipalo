@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package equipalo.entities;
+package Entities;
 
-import Persistencia.SolicitudRepository;
+import Repository.SolicitudRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;

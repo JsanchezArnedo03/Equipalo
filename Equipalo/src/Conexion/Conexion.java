@@ -1,4 +1,4 @@
-package equipalo;
+package Conexion;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
