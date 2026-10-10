@@ -24,18 +24,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
      */
     private String numeroDocumento;
     private DispositivoRepository dispositivoService = new DispositivoRepository();
-
+    
     public FrmPrincipal(String documento) {
         initComponents();
         cargarComboBox(jcDispositivos);
-
+        lblEmpleado.setVisible(false);
         this.numeroDocumento = documento;
         Empleados empleadoLogueado = validarExistenciaEmpleado(numeroDocumento);
-
+        
         if (empleadoLogueado != null) {
             if (empleadoLogueado.getSegundoNombre() == null) {
                 String segundoNombre = empleadoLogueado.getSegundoNombre();
-
+                
                 String segundoNombreFormateado = (segundoNombre == null || segundoNombre.trim().isEmpty())
                         ? ""
                         : " " + segundoNombre;
@@ -44,7 +44,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                         + " " + empleadoLogueado.getPrimerApellido()
                         + " " + empleadoLogueado.getSegundoApellido());
                 lblEmpleado.setVisible(true);
-            } else if (empleadoLogueado.getSegundoNombre() == null) {
+            } else if (empleadoLogueado.getSegundoNombre() != null) {
                 lblEmpleado.setText(empleadoLogueado.getPrimerNombre()
                         + " " + empleadoLogueado.getSegundoNombre()
                         + " " + empleadoLogueado.getPrimerApellido()
@@ -52,7 +52,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 lblEmpleado.setVisible(true);
             }
         } else {
-            JOptionPane.showMessageDialog(rootPane,"Error el empleado no existe","Error",2);
+            JOptionPane.showMessageDialog(rootPane, "Error el empleado no existe", "Error", 2);
         }
     }
 
@@ -189,16 +189,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSolicitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarActionPerformed
-
+        
         Date todayDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String fechaActual = sdf.format(todayDate);
-
+        
         Date fechaSeleccionada = jcFechaSeleccionada.getDate();
         String fechaSeleccionadaFormateada = sdf.format(fechaSeleccionada);
-
+        
         if (!fechaSeleccionadaFormateada.equals(fechaActual)) {
-
+            
             JOptionPane.showMessageDialog(rootPane, "Dispositivo reservado correctamente", "CORRECTO!", JOptionPane.CLOSED_OPTION);
         } else {
             JOptionPane.showMessageDialog(rootPane, "Error, el dia de debe solicitar los dispositivos con minimo 2 dias de anticipación", "", 2);
@@ -222,7 +222,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         this.dispose();
         nuevoDispositivo.setVisible(true);
     }//GEN-LAST:event_jmNuevoDispositivoActionPerformed
-
     
     private void cargarComboBox(JComboBox c) {
         ArrayList<String> dispositivos = dispositivoService.getAllDispostivos();
@@ -230,7 +229,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             c.addItem(dispositivos.get(i));
         }
     }
-
+    
     protected Empleados validarExistenciaEmpleado(String numeroDocumento) {
         EmpleadoService negocio = new EmpleadoService();
         Empleados empleado = negocio.validarExistencia(numeroDocumento);
