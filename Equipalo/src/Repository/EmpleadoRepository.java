@@ -46,7 +46,7 @@ public class EmpleadoRepository {
     }
 
     public Empleados validarExistencia(String numeroDocumento) {
-        String sql = "SELECT * FROM empleados WHERE numero_documento = ?";
+        String sql = "call login(?);";
         Empleados empleado = null;
 
         Conexion conexion = new Conexion();
@@ -67,9 +67,9 @@ public class EmpleadoRepository {
                     empleado.setSegundoApellido(rs.getString("segundo_apellido"));
 
                     // Mapeo del objeto TipoDocumento si tu entidad lo requiere
-                    TipoDocumento tipoDoc = new TipoDocumento();
+                    /*TipoDocumento tipoDoc = new TipoDocumento();
                     tipoDoc.setIdTipoDocumento(rs.getInt("fk_tipo_documento"));
-                    empleado.setTipoDocumento(tipoDoc);
+                    empleado.setTipoDocumento(tipoDoc);*/
                 }
             }
 

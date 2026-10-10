@@ -4,6 +4,10 @@
  */
 package Vista;
 
+import Entities.Empleados;
+import Service.EmpleadoService;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author jssa3
@@ -13,6 +17,8 @@ public class FrmLogin extends javax.swing.JFrame {
     /**
      * Creates new form FrmLogin
      */
+    private EmpleadoService empleadoService = new EmpleadoService();
+
     public FrmLogin() {
         initComponents();
     }
@@ -72,12 +78,24 @@ public class FrmLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        
+
         String documento = txtPassword.getText();
-        this.dispose();
-        FrmPrincipal principal = new FrmPrincipal(documento);
-        principal.setVisible(true);
+        Empleados empleadoLogueado = validarExistenciaEmpleado(documento);
+        if (documento.isBlank() || documento.isEmpty() || documento.equalsIgnoreCase("")) {
+            JOptionPane.showMessageDialog(rootPane, "El campo documento debe ser diligenciado", "Error", 2);
+        } else if (empleadoLogueado == null) {
+            JOptionPane.showMessageDialog(rootPane, "El empleado no existe", "Error", 2);
+        } else {
+            this.dispose();
+            FrmPrincipal principal = new FrmPrincipal(documento);
+            principal.setVisible(true);
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
+    protected Empleados validarExistenciaEmpleado(String numeroDocumento) {
+        EmpleadoService negocio = new EmpleadoService();
+        Empleados empleado = negocio.validarExistencia(numeroDocumento);
+        return empleado;
+    }
 
     /**
      * @param args the command line arguments

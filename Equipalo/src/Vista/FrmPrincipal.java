@@ -33,16 +33,27 @@ public class FrmPrincipal extends javax.swing.JFrame {
         Empleados empleadoLogueado = validarExistenciaEmpleado(numeroDocumento);
 
         if (empleadoLogueado != null) {
-            lblEmpleado.setText(empleadoLogueado.getPrimerNombre()
-                    + " " + empleadoLogueado.getSegundoNombre()
-                    + " " + empleadoLogueado.getPrimerApellido()
-                    + " " + empleadoLogueado.getSegundoApellido());
-            lblEmpleado.setVisible(true);
-        } else {
-            lblEmpleado.setText("Usuario Desconocido");
-            lblEmpleado.setVisible(true);
-        }
+            if (empleadoLogueado.getSegundoNombre() == null) {
+                String segundoNombre = empleadoLogueado.getSegundoNombre();
 
+                String segundoNombreFormateado = (segundoNombre == null || segundoNombre.trim().isEmpty())
+                        ? ""
+                        : " " + segundoNombre;
+                lblEmpleado.setText(empleadoLogueado.getPrimerNombre()
+                        + segundoNombreFormateado
+                        + " " + empleadoLogueado.getPrimerApellido()
+                        + " " + empleadoLogueado.getSegundoApellido());
+                lblEmpleado.setVisible(true);
+            } else if (empleadoLogueado.getSegundoNombre() == null) {
+                lblEmpleado.setText(empleadoLogueado.getPrimerNombre()
+                        + " " + empleadoLogueado.getSegundoNombre()
+                        + " " + empleadoLogueado.getPrimerApellido()
+                        + " " + empleadoLogueado.getSegundoApellido());
+                lblEmpleado.setVisible(true);
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane,"Error el empleado no existe","Error",2);
+        }
     }
 
     /**
@@ -54,6 +65,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem1 = new javax.swing.JMenuItem();
         btnSolicitar = new javax.swing.JButton();
         jcDispositivos = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
@@ -66,6 +78,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmCerrarSesion = new javax.swing.JMenuItem();
         jmInforme = new javax.swing.JMenu();
         jmRevisarInformes = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jmNuevoDispositivo = new javax.swing.JMenuItem();
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -109,6 +125,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jmInforme.add(jmRevisarInformes);
 
         jMenuBar1.add(jmInforme);
+
+        jMenu2.setText("Dispositivos");
+
+        jmNuevoDispositivo.setText("Nuevo dispostivio");
+        jmNuevoDispositivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmNuevoDispositivoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jmNuevoDispositivo);
+
+        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -189,6 +217,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jmCerrarSesionActionPerformed
 
+    private void jmNuevoDispositivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmNuevoDispositivoActionPerformed
+        FrmNuevoDispositivo nuevoDispositivo = new FrmNuevoDispositivo(numeroDocumento);
+        this.dispose();
+        nuevoDispositivo.setVisible(true);
+    }//GEN-LAST:event_jmNuevoDispositivoActionPerformed
+
+    
     private void cargarComboBox(JComboBox c) {
         ArrayList<String> dispositivos = dispositivoService.getAllDispostivos();
         for (int i = 0; dispositivos.size() > i; i++) {
@@ -243,11 +278,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JComboBox<String> jcDispositivos;
     private com.toedter.calendar.JCalendar jcFechaSeleccionada;
     private javax.swing.JMenuItem jmCerrarSesion;
     private javax.swing.JMenu jmInforme;
+    private javax.swing.JMenuItem jmNuevoDispositivo;
     private javax.swing.JMenuItem jmRevisarInformes;
     private javax.swing.JLabel lblDispositivo;
     private javax.swing.JLabel lblEmpleado;
