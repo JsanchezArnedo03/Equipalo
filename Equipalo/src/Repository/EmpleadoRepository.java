@@ -22,12 +22,8 @@ public class EmpleadoRepository {
         String sql = "INSERT INTO empleados (fk_tipo_documento, cod_empleado, numero_documento, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        Conexion conexion = new Conexion();
+        try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-        // try-with-resources cierra automáticamente la conexión y el PreparedStatement
-        try (Connection con = conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-
-            // Asumiendo que getIdTipoDocumento() devuelve el ID numérico (INT)
             ps.setInt(1, empleado.getTipoDocumento().getIdTipoDocumento());
             ps.setString(2, empleado.getCodEmpleado());
             ps.setString(3, empleado.getNumeroDocumento());

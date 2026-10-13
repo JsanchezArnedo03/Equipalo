@@ -4,6 +4,17 @@
  */
 package Vista;
 
+import Entities.Empleados;
+import Entities.TipoDocumento;
+import Service.EmpleadoService;
+import Service.TipoDocumentoService;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author jssa3
@@ -14,10 +25,19 @@ public class FrmCrearEmpleado extends javax.swing.JFrame {
      * Creates new form FrmCrearEmpleado
      */
     private String numeroDocumento;
+    private EmpleadoService empleadoService = new EmpleadoService();
+    private TipoDocumentoService tipoDocumentoService = new TipoDocumentoService();
 
     public FrmCrearEmpleado(String documento) {
         initComponents();
         this.numeroDocumento = documento;
+        cargarComboBox(jcTipoDocumento);
+
+        txtNumeroDocumento.setEditable(false);
+        txtPrimerNombre.setEditable(false);
+        txtSegundoNombre.setEditable(false);
+        txtPrimerApellido.setEditable(false);
+        txtSegundoApellido.setEditable(false);
     }
 
     /**
@@ -29,12 +49,53 @@ public class FrmCrearEmpleado extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        txtNumeroDocumento = new javax.swing.JTextField();
+        txtPrimerNombre = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtSegundoNombre = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txtPrimerApellido = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        txtSegundoApellido = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        btnRegistrar = new javax.swing.JButton();
+        jcTipoDocumento = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jmRegresar = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Numero de documento");
+
+        jLabel2.setText("Primer Nombre");
+
+        jLabel3.setText("Segundo Nombre");
+
+        jLabel4.setText("Primer Apellido");
+
+        jLabel5.setText("Segundo Apellido");
+
+        btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
+
+        jcTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECCIONE" }));
+        jcTipoDocumento.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jcTipoDocumentoFocusLost(evt);
+            }
+        });
+        jcTipoDocumento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcTipoDocumentoActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Regresar");
 
@@ -57,11 +118,64 @@ public class FrmCrearEmpleado extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 658, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNumeroDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(jcTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPrimerNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtSegundoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(37, 37, 37)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtSegundoApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPrimerApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(56, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnRegistrar)
+                .addGap(85, 85, 85))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtNumeroDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtPrimerNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtPrimerApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtSegundoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtSegundoApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addComponent(btnRegistrar)
+                .addGap(55, 55, 55))
         );
 
         pack();
@@ -70,7 +184,74 @@ public class FrmCrearEmpleado extends javax.swing.JFrame {
     private void jmRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmRegresarActionPerformed
         this.dispose();
         FrmPrincipal principal = new FrmPrincipal(numeroDocumento);
+        principal.setVisible(true);
     }//GEN-LAST:event_jmRegresarActionPerformed
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        Integer indexTipoDocumento = jcTipoDocumento.getSelectedIndex();
+        String numeroDocumentoNuevoEmpleado = txtNumeroDocumento.getText();
+        Empleados empleadoExiste = empleadoService.validarExistencia(numeroDocumentoNuevoEmpleado);
+        String primerNombre = txtPrimerNombre.getText();
+        String segundoNombre = txtSegundoNombre.getText();
+        String primerApellido = txtPrimerApellido.getText();
+        String segundoApellido = txtSegundoApellido.getText();
+
+        if (empleadoExiste == null) {
+            try {
+                Empleados nuevoEmpleado = new Empleados();
+                nuevoEmpleado.setTipoDocumento(getByIndex(indexTipoDocumento));
+                nuevoEmpleado.setNumeroDocumento(numeroDocumentoNuevoEmpleado);
+                nuevoEmpleado.setPrimerNombre(txtPrimerNombre.getText());
+                nuevoEmpleado.setSegundoNombre(txtSegundoNombre.getText());
+                nuevoEmpleado.setPrimerApellido(txtPrimerApellido.getText());
+                nuevoEmpleado.setSegundoApellido(txtSegundoApellido.getText());
+                nuevoEmpleado.setCodEmpleado(empleadoService.codificarEmpleado(numeroDocumentoNuevoEmpleado, primerNombre, segundoNombre, primerApellido, segundoApellido));
+                boolean creado = empleadoService.CrearEmpleado(nuevoEmpleado);
+                if (!creado) {
+                    JOptionPane.showMessageDialog(rootPane, "Error del servidor", "Error", 3);
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Empleado creado con exito", "Creado con exito", 1);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(FrmCrearEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "El empleado ya existe dentro del sistema", "Error", 2);
+        }
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void jcTipoDocumentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcTipoDocumentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcTipoDocumentoActionPerformed
+
+    private void jcTipoDocumentoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jcTipoDocumentoFocusLost
+        int index = jcTipoDocumento.getSelectedIndex();
+        if (index == 0) {
+            JOptionPane.showMessageDialog(rootPane, "Debe seleccionar un tipo de documento para continuar");
+        } else {
+            desbloquearCampos();
+        }
+    }//GEN-LAST:event_jcTipoDocumentoFocusLost
+
+    private void cargarComboBox(JComboBox c) {
+        List<String> documentos = tipoDocumentoService.getAllTipoDocumento();
+        for (int i = 0; documentos.size() > i; i++) {
+            c.addItem(documentos.get(i));
+        }
+    }
+
+    private TipoDocumento getByIndex(Integer index) throws SQLException {
+        TipoDocumento tipoDocumento = tipoDocumentoService.getByIndex(index);
+        return tipoDocumento;
+    }
+
+    private void desbloquearCampos() {
+        txtNumeroDocumento.setEditable(true);
+        txtPrimerNombre.setEditable(true);
+        txtSegundoNombre.setEditable(true);
+        txtPrimerApellido.setEditable(true);
+        txtSegundoApellido.setEditable(true);
+    }
 
     /**
      * @param args the command line arguments
@@ -106,9 +287,21 @@ public class FrmCrearEmpleado extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegistrar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JComboBox<String> jcTipoDocumento;
     private javax.swing.JMenuItem jmRegresar;
+    private javax.swing.JTextField txtNumeroDocumento;
+    private javax.swing.JTextField txtPrimerApellido;
+    private javax.swing.JTextField txtPrimerNombre;
+    private javax.swing.JTextField txtSegundoApellido;
+    private javax.swing.JTextField txtSegundoNombre;
     // End of variables declaration//GEN-END:variables
 }
