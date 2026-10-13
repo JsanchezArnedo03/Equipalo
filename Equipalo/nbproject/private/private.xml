@@ -3,12 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/jssa3/OneDrive/Documentos/Software/Equipalo/src/Repository/EmpleadoRepository.java</file>
-            <file>file:/C:/Users/jssa3/OneDrive/Documentos/Software/Equipalo/src/Service/EmpleadoService.java</file>
-            <file>file:/C:/Users/jssa3/OneDrive/Documentos/Software/Equipalo/src/Repository/TipoDocumentoRepository.java</file>
+            <file>file:/C:/Users/jssa3/OneDrive/Documentos/Software/Equipalo/src/Service/DispositivoService.java</file>
+            <file>file:/C:/Users/jssa3/OneDrive/Documentos/Software/Equipalo/src/Service/SolicitudService.java</file>
+            <file>file:/C:/Users/jssa3/OneDrive/Documentos/Software/Equipalo/src/Repository/SolicitudRepository.java</file>
+            <file>file:/C:/Users/jssa3/OneDrive/Documentos/Software/Equipalo/src/Repository/DispositivoRepository.java</file>
             <file>file:/C:/Users/jssa3/OneDrive/Documentos/Software/Equipalo/src/Vista/FrmPrincipal.java</file>
-            <file>file:/C:/Users/jssa3/OneDrive/Documentos/Software/Equipalo/src/Vista/FrmCrearEmpleado.java</file>
-            <file>file:/C:/Users/jssa3/OneDrive/Documentos/Software/Equipalo/src/Service/TipoDocumentoService.java</file>
         </group>
     </open-files>
 </project-private>

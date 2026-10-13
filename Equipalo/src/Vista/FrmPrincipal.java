@@ -4,9 +4,12 @@
  */
 package Vista;
 
+import Entities.Dispositivos;
 import Service.EmpleadoService;
 import Repository.DispositivoRepository;
 import Entities.Empleados;
+import Entities.Solicitudes;
+import Service.SolicitudService;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,20 +25,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form FrmPrincipal
      */
-    private String numeroDocumento;
-    private DispositivoRepository dispositivoService = new DispositivoRepository();
-    
+    private final String numeroDocumento;
+    private final DispositivoRepository dispositivoService = new DispositivoRepository();
+    private final SolicitudService solicitudService = new SolicitudService();
+
     public FrmPrincipal(String documento) {
         initComponents();
         cargarComboBox(jcDispositivos);
         lblEmpleado.setVisible(false);
+
         this.numeroDocumento = documento;
         Empleados empleadoLogueado = validarExistenciaEmpleado(numeroDocumento);
-        
+
         if (empleadoLogueado != null) {
             if (empleadoLogueado.getSegundoNombre() == null) {
                 String segundoNombre = empleadoLogueado.getSegundoNombre();
-                
+
                 String segundoNombreFormateado = (segundoNombre == null || segundoNombre.trim().isEmpty())
                         ? ""
                         : " " + segundoNombre;
@@ -209,21 +214,37 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSolicitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarActionPerformed
-        
         Date todayDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         String fechaActual = sdf.format(todayDate);
-        
+
         Date fechaSeleccionada = jcFechaSeleccionada.getDate();
         String fechaSeleccionadaFormateada = sdf.format(fechaSeleccionada);
-        
         if (!fechaSeleccionadaFormateada.equals(fechaActual)) {
-            
             JOptionPane.showMessageDialog(rootPane, "Dispositivo reservado correctamente", "CORRECTO!", JOptionPane.CLOSED_OPTION);
+
         } else {
             JOptionPane.showMessageDialog(rootPane, "Error, el dia de debe solicitar los dispositivos con minimo 2 dias de anticipación", "", 2);
         }
     }//GEN-LAST:event_btnSolicitarActionPerformed
+
+    private Solicitudes crearSolicitud(String codSolicitud,
+            Empleados empleado, Dispositivos dispositivo, Date fechaCracionSolicitud,
+            Date fechaSolicitada) {
+        Solicitudes nuevaSolicitud = new Solicitudes();
+        if (dispositivoService.validarDisponibilidad(dispositivo.getIdDispositivo())) {
+            
+            nuevaSolicitud.setCodSolicitud(codSolicitud);
+            nuevaSolicitud.setDispositivoSolicitado(dispositivo);
+            nuevaSolicitud.setEmpleadoSolicita(empleado);
+            nuevaSolicitud.setFechaCreacionSolicitud(fechaCracionSolicitud);
+            nuevaSolicitud.setFechaSolicitada(fechaSolicitada);
+
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Error el dispositivo no esta disponible", "Error", 3);
+        }
+        return nuevaSolicitud;
+    }
 
     private void jmRevisarInformesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmRevisarInformesActionPerformed
         FrmInforme frmInforme = new FrmInforme(numeroDocumento);
@@ -248,14 +269,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         FrmCrearEmpleado frmCrearEmpleado = new FrmCrearEmpleado(numeroDocumento);
         frmCrearEmpleado.setVisible(true);
     }//GEN-LAST:event_jmCrearEmpleadoActionPerformed
-    
+
     private void cargarComboBox(JComboBox c) {
         ArrayList<String> dispositivos = dispositivoService.getAllDispostivos();
         for (int i = 0; dispositivos.size() > i; i++) {
             c.addItem(dispositivos.get(i));
         }
     }
-    
+
     protected Empleados validarExistenciaEmpleado(String numeroDocumento) {
         EmpleadoService negocio = new EmpleadoService();
         Empleados empleado = negocio.validarExistencia(numeroDocumento);

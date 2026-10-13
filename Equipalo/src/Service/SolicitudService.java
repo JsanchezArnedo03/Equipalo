@@ -21,8 +21,13 @@ private final SolicitudRepository repository;
         this.repository = new SolicitudRepository();
     }
 
+    public boolean crearSolicitud(Solicitudes solicitudes){
+        return repository.crearSolicitud(solicitudes);
+    }
+    
     public List<Solicitudes> listarSolicitudes() {
         // Aquí puedes agregar filtros o reglas de negocio antes de retornar
         return repository.consultarSolicitudes();
     }
+    
 }

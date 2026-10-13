@@ -4,25 +4,46 @@
  */
 package Repository;
 
-import Conexion.Conexion;
 import Entities.Solicitudes;
 import java.util.List;
 import Conexion.Conexion;
 import Entities.Dispositivos;
 import Entities.Empleados;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  *
  * @author jssa3
  */
 public class SolicitudRepository {
+
+    public boolean crearSolicitud(Solicitudes solicitudes) {
+        String sql = "INSERT INTO solicitudes (cod_solicitud,fk_empleado_solicita,fk_dispositivo_solicitado,"
+                + "fecha_creacion_solicitud,fecha_solicitada,estado_solicitud)"
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(2, solicitudes.getCodSolicitud());
+            ps.setObject(3, solicitudes.getEmpleadoSolicita());
+            ps.setObject(4, solicitudes.getDispositivoSolicitado());
+            ps.setDate(5, (Date) solicitudes.getFechaCreacionSolicitud());
+            ps.setDate(6, (Date) solicitudes.getFechaSolicitada());
+            ps.setObject(7, solicitudes.getEstadoSolicitud());
+
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al crear empleado: " + e.getMessage());
+            return false;
+        }
+    }
 
     public List<Solicitudes> consultarSolicitudes() {
         List<Solicitudes> tabla = new ArrayList<>();

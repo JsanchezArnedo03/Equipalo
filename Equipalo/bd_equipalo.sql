@@ -1,11 +1,13 @@
-drop database prestamos;
+DROP DATABASE IF EXISTS prestamos;
 CREATE DATABASE prestamos;
 USE prestamos;
 
+-- 1. Tablas de Catálogo / Independientes
 CREATE TABLE estado_solicitud (
     id_estado_solicitud INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     estado_solicitud VARCHAR(25) NOT NULL
 );
+
 CREATE TABLE estado_dispositivo (
     id_estado_dispositivo INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     estado_dispositivo VARCHAR(20) NOT NULL
@@ -17,15 +19,22 @@ CREATE TABLE tipo_documento (
     descripcion VARCHAR(50)
 );
 
+CREATE TABLE rol (
+    id_rol INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    rol VARCHAR(25)
+);
+
 CREATE TABLE dispositivos (
     id_dispositivo INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     cod_dispositivo VARCHAR(20) NOT NULL,
     nombre_dispositivo VARCHAR(200) NOT NULL
 );
 
+-- 2. Tablas con Dependencias (Foreign Keys)
 CREATE TABLE empleados (
     id_empleado INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     fk_tipo_documento INT,
+    fk_rol INT,
     cod_empleado VARCHAR(10) NOT NULL,
     numero_documento VARCHAR(10) NOT NULL,
     primer_nombre VARCHAR(100) NOT NULL,
@@ -33,7 +42,9 @@ CREATE TABLE empleados (
     primer_apellido VARCHAR(100) NOT NULL,
     segundo_apellido VARCHAR(100),
     CONSTRAINT FOREIGN KEY (fk_tipo_documento)
-        REFERENCES prestamos.tipo_documento (id_tipo_documento)
+        REFERENCES prestamos.tipo_documento (id_tipo_documento),
+    CONSTRAINT FOREIGN KEY (fk_rol)
+        REFERENCES prestamos.rol (id_rol)
 );
 
 CREATE TABLE solicitudes (
@@ -65,37 +76,63 @@ CREATE TABLE devolucion (
         REFERENCES prestamos.estado_dispositivo (id_estado_dispositivo)
 );
 
+-- ==========================================
+-- INSERCIÓN DE DATOS
+-- ==========================================
 
-insert into estado_solicitud(id_estado_solicitud,estado_solicitud)
-values(1,"PENDIENTE"),(2,"EN REVISION"),(3,"ENTREGADO"),(4,"REVISADA"),(5,"APROBADA");
+-- Estados de Solicitud
+INSERT INTO estado_solicitud (id_estado_solicitud, estado_solicitud) VALUES
+(1, 'PENDIENTE'),
+(2, 'EN REVISION'),
+(3, 'ENTREGADO'),
+(4, 'REVISADA'),
+(5, 'APROBADA');
 
-insert into estado_dispositivo(id_estado_dispositivo,estado_dispositivo)
-values(1,"DISPONIBLE"),(2,"AVERIADO"),(3,"EXTRAVIADO"),(4,"EN MANTENIMIENTO");
+-- Estados de Dispositivo
+INSERT INTO estado_dispositivo (id_estado_dispositivo, estado_dispositivo) VALUES
+(1, 'DISPONIBLE'),
+(2, 'AVERIADO'),
+(3, 'EXTRAVIADO'),
+(4, 'EN MANTENIMIENTO');
 
-insert into tipo_documento(id_tipo_documento,tipo_documento,abreviatura,descripcion)
-values(1,"CEDULA DE CIUDADANIA","CC",""),(2,"CEDULA DE EXTRANJERIA","CE",""),(3,"PERMISO ESPECIAL DE PERMANENCIA","PEP",""),(4,"PERMISO POR PROTECCION TEMPORAL","PPT","");
+-- Tipos de Documento
+INSERT INTO tipo_documento (id_tipo_documento, tipo_documento, abreviatura, descripcion) VALUES
+(1, 'CEDULA DE CIUDADANIA', 'CC', ''),
+(2, 'CEDULA DE EXTRANJERIA', 'CE', ''),
+(3, 'PERMISO ESPECIAL DE PERMANENCIA', 'PEP', ''),
+(4, 'PERMISO POR PROTECCION TEMPORAL', 'PPT', '');
 
-insert into dispositivos(id_dispositivo,cod_dispositivo,nombre_dispositivo)
-values(1,"PC-1","COMPUTADOR #1"),(2,"PC-2","COMPUTADOR #2"),(3,"PC-3","COMPUTADOR #3"),(4,"PC-4","COMPUTADOR #4")
-,(5,"PR-1","PROYECTOR #1");
+-- Roles (Añadido para completar la relación con empleados)
+INSERT INTO rol (id_rol, rol) VALUES
+(1, 'ADMINISTRADOR'),
+(2, 'EMPLEADO'),
+(3, 'TECNICO');
 
-INSERT INTO empleados (fk_tipo_documento, cod_empleado, numero_documento, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido)
-VALUES 
-    (1, 'EMP001', '1010101011', 'Carlos', 'Andrés', 'García', 'López'),
-    (1, 'EMP002', '1020202022', 'María', 'Fernanda', 'Rodríguez', 'Pérez'),
-    (2, 'EMP003', '1030303033', 'Luis', NULL, 'Martínez', 'Gómez'),
-    (1, 'EMP004', '1040404044', 'Ana', 'Lucía', 'Hernández', NULL),
-    (3, 'EMP005', '1050505055', 'Jorge', 'Eduardo', 'Díaz', 'Sánchez'),
-    (1, 'EMP006', '1060606066', 'Laura', 'Camila', 'Ramírez', 'Torres'),
-    (2, 'EMP007', '1070707077', 'Diego', 'Alejandro', 'Rojas', 'Vargas'),
-    (1, 'EMP008', '1080808088', 'Marta', 'Elena', 'Castro', 'Gutiérrez'),
-    (4, 'EMP009', '1090909099', 'Pedro', 'Pablo', 'Ortiz', 'Navarro'),
-    (1, 'EMP010', '1100101010', 'Valeria', NULL, 'Silva', 'Mendoza');
-    
+-- Dispositivos
+INSERT INTO dispositivos (id_dispositivo, cod_dispositivo, nombre_dispositivo) VALUES
+(1, 'PC-1', 'COMPUTADOR #1'),
+(2, 'PC-2', 'COMPUTADOR #2'),
+(3, 'PC-3', 'COMPUTADOR #3'),
+(4, 'PC-4', 'COMPUTADOR #4'),
+(5, 'PR-1', 'PROYECTOR #1');
 
-insert into solicitudes(id_solicitudes,cod_solicitud,fk_empleado_solicita,fk_dispositivo_solicitado,fecha_creacion_solicitud,fecha_solicitada,estado_solicitud)
-values(1,"RDS-1",1,1,current_timestamp(),'2026-10-01 08:00:00',5);
+-- Empleados (Actualizado incluyendo fk_rol)
+INSERT INTO empleados (fk_tipo_documento, fk_rol, cod_empleado, numero_documento, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido) VALUES 
+(1, 1, 'EMP001', '1010101011', 'Carlos', 'Andrés', 'García', 'López'),
+(1, 2, 'EMP002', '1020202022', 'María', 'Fernanda', 'Rodríguez', 'Pérez'),
+(2, 2, 'EMP003', '1030303033', 'Luis', NULL, 'Martínez', 'Gómez'),
+(1, 2, 'EMP004', '1040404044', 'Ana', 'Lucía', 'Hernández', NULL),
+(3, 3, 'EMP005', '1050505055', 'Jorge', 'Eduardo', 'Díaz', 'Sánchez'),
+(1, 2, 'EMP006', '1060606066', 'Laura', 'Camila', 'Ramírez', 'Torres'),
+(2, 2, 'EMP007', '1070707077', 'Diego', 'Alejandro', 'Rojas', 'Vargas'),
+(1, 2, 'EMP008', '1080808088', 'Marta', 'Elena', 'Castro', 'Gutiérrez'),
+(4, 3, 'EMP009', '1090909099', 'Pedro', 'Pablo', 'Ortiz', 'Navarro'),
+(1, 1, 'EMP010', '1100101010', 'Valeria', NULL, 'Silva', 'Mendoza');
 
+-- Solicitudes
+INSERT INTO solicitudes (id_solicitudes, cod_solicitud, fk_empleado_solicita, fk_dispositivo_solicitado, fecha_creacion_solicitud, fecha_solicitada, estado_solicitud) VALUES
+(1, 'RDS-1', 1, 1, CURRENT_TIMESTAMP(), '2026-10-01 08:00:00', 5);
 
-insert into devolucion(id_solicitud_estado_equipo,fk_solicitud,fk_dispositivo,fk_estado_dispositivo)
-values(1,1,1,1);
+-- Devolución
+INSERT INTO devolucion (id_solicitud_estado_equipo, fk_solicitud, fk_dispositivo, fk_estado_dispositivo) VALUES
+(1, 1, 1, 1);

@@ -46,3 +46,12 @@ BEGIN
 END;
 
 $$
+create procedure login(p_numero_documento varchar(10))
+begin
+select e.id_empleado,e.cod_empleado,e.numero_documento,
+e.primer_nombre,e.segundo_nombre,e.primer_apellido,e.segundo_apellido 
+from empleados e where p_numero_documento = e.numero_documento;
+end;
+
+$$
+call login("1010101011");

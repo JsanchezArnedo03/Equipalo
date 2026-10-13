@@ -24,15 +24,14 @@ public class FrmCrearEmpleado extends javax.swing.JFrame {
     /**
      * Creates new form FrmCrearEmpleado
      */
-    private String numeroDocumento;
-    private EmpleadoService empleadoService = new EmpleadoService();
-    private TipoDocumentoService tipoDocumentoService = new TipoDocumentoService();
+    private final String numeroDocumento;
+    private final EmpleadoService empleadoService = new EmpleadoService();
+    private final TipoDocumentoService tipoDocumentoService = new TipoDocumentoService();
 
     public FrmCrearEmpleado(String documento) {
         initComponents();
         this.numeroDocumento = documento;
         cargarComboBox(jcTipoDocumento);
-
         txtNumeroDocumento.setEditable(false);
         txtPrimerNombre.setEditable(false);
         txtSegundoNombre.setEditable(false);
