@@ -6,6 +6,8 @@ package Repository;
 
 import Conexion.Conexion;
 import Entities.Dispositivos;
+import Entities.EstadoDispositivo;
+import Entities.TipoDispositivo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -56,26 +58,38 @@ public class DispositivoRepository {
         return listDispositivos;
     }
 
-    public boolean validarDisponibilidad(Integer idDispositivo) {
-        String consulta = "SELECT s.estado_solicitud from solicitudes s "
-                + "inner join dispositivos d on s.fk_dispositivo_solicitado = d.id_dispositivo where "
-                + "s.fk_dispositivo_solicitado = ?";
-
+    public Dispositivos validarDisponibilidad(Integer idDispositivo) {
+        String consulta = "SELECT d.id_dispositivo, d.nombre_dispositivo,tpd.tipo_dispositivo, ed.id_estado_dispositivo "
+                + "            FROM dispositivos d "
+                + "            INNER JOIN estado_dispositivo ed ON d.fk_estado_dispositivo = ed.id_estado_dispositivo "
+                + "            INNER JOIN tipo_dispositivo tpd ON d.fk_tipo_dispositivo = tpd.id_tipo_dispositivo"
+                + "            WHERE d.id_dispositivo = ?";
+        Dispositivos dispositivoValido = null;
+        TipoDispositivo tipoDispositivo = null;
         try {
             PreparedStatement ps = con.prepareStatement(consulta);
             ps.setInt(1, idDispositivo);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                int estadoSolicitud = rs.getInt("estado_solicitud");
-                if (estadoSolicitud == 6) {
-                    return true;
-                } else {
-                    return false;
+                Integer idEstadoDispositivo = rs.getInt("ed.id_estado_dispositivo");
+                if (idEstadoDispositivo == 1) {
+
+                    dispositivoValido = new Dispositivos();
+                    tipoDispositivo = new TipoDispositivo();
+                    dispositivoValido.setIdDispositivo(rs.getInt("id_dispositivo"));
+                    dispositivoValido.setNombreDispositivo(rs.getString("nombre_dispositivo"));
+                    tipoDispositivo.setTipoDispositivo(rs.getString("tipo_dispositivo"));
+                    tipoDispositivo.setSiglas(rs.getString("siglas"));
+                    dispositivoValido.setTipoDispositivo(tipoDispositivo);
+
+                    return dispositivoValido;
                 }
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(DispositivoRepository.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return dispositivoValido;
     }
+
 }

@@ -22,6 +22,8 @@ import java.util.ArrayList;
  */
 public class SolicitudRepository {
 
+    Connection con = Conexion.getConnection();
+
     public boolean crearSolicitud(Solicitudes solicitudes) {
         String sql = "INSERT INTO solicitudes (cod_solicitud,fk_empleado_solicita,fk_dispositivo_solicitado,"
                 + "fecha_creacion_solicitud,fecha_solicitada,estado_solicitud)"
@@ -93,4 +95,27 @@ public class SolicitudRepository {
         // Retorna directamente la lista poblada
         return tabla;
     }
+
+    /*public boolean validarDisponibilidad(Integer idDispositivo) {
+        String consulta = "SELECT s.estado_solicitud from solicitudes s "
+                + "inner join dispositivos d on s.fk_dispositivo_solicitado = d.id_dispositivo where "
+                + "s.fk_dispositivo_solicitado = ?";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(consulta);
+            ps.setInt(1, idDispositivo);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int estadoSolicitud = rs.getInt("estado_solicitud");
+                if (estadoSolicitud == 6) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+        return false;
+    }*/
 }

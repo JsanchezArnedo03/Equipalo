@@ -12,6 +12,13 @@ CREATE TABLE estado_dispositivo (
     id_estado_dispositivo INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     estado_dispositivo VARCHAR(20) NOT NULL
 );
+
+CREATE TABLE tipo_dispositivo (
+    id_tipo_dispositivo INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    tipo_dispositivo VARCHAR(150) NOT NULL,
+    siglas varchar(5) not null
+);
+
 CREATE TABLE tipo_documento (
     id_tipo_documento INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     tipo_documento VARCHAR(150) NOT NULL,
@@ -27,7 +34,13 @@ CREATE TABLE rol (
 CREATE TABLE dispositivos (
     id_dispositivo INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     cod_dispositivo VARCHAR(20) NOT NULL,
-    nombre_dispositivo VARCHAR(200) NOT NULL
+    nombre_dispositivo VARCHAR(200) NOT NULL,
+    fk_tipo_dispositivo INT,
+    fk_estado_dispositivo INT,
+    CONSTRAINT FOREIGN KEY (fk_tipo_dispositivo)
+        REFERENCES prestamos.tipo_dispositivo (id_tipo_dispositivo),
+    CONSTRAINT FOREIGN KEY (fk_estado_dispositivo)
+        REFERENCES prestamos.estado_dispositivo (id_estado_dispositivo)
 );
 
 -- 2. Tablas con Dependencias (Foreign Keys)
@@ -95,6 +108,8 @@ INSERT INTO estado_dispositivo (id_estado_dispositivo, estado_dispositivo) VALUE
 (3, 'EXTRAVIADO'),
 (4, 'EN MANTENIMIENTO');
 
+
+
 -- Tipos de Documento
 INSERT INTO tipo_documento (id_tipo_documento, tipo_documento, abreviatura, descripcion) VALUES
 (1, 'CEDULA DE CIUDADANIA', 'CC', ''),
@@ -108,13 +123,19 @@ INSERT INTO rol (id_rol, rol) VALUES
 (2, 'EMPLEADO'),
 (3, 'TECNICO');
 
+insert into tipo_dispositivo(id_tipo_dispositivo,tipo_dispositivo,siglas)
+values(1,"COMPUTADOR PORTATIL","PC")
+,(2,"PROYECTOR HP","PRHP"),
+(3,"PROYECTOR EPSON","PREP"),
+(4,"TABLET","TB");
+
 -- Dispositivos
-INSERT INTO dispositivos (id_dispositivo, cod_dispositivo, nombre_dispositivo) VALUES
-(1, 'PC-1', 'COMPUTADOR #1'),
-(2, 'PC-2', 'COMPUTADOR #2'),
-(3, 'PC-3', 'COMPUTADOR #3'),
-(4, 'PC-4', 'COMPUTADOR #4'),
-(5, 'PR-1', 'PROYECTOR #1');
+INSERT INTO dispositivos (id_dispositivo, cod_dispositivo, nombre_dispositivo,fk_tipo_dispositivo,fk_estado_dispositivo) VALUES
+(1, 'PC-1', 'COMPUTADOR #1',1,1),
+(2, 'PC-2', 'COMPUTADOR #2',1,1),
+(3, 'PC-3', 'COMPUTADOR #3',1,1),
+(4, 'PC-4', 'COMPUTADOR #4',1,1),
+(5, 'PR-1', 'PROYECTOR #1',2,1);
 
 -- Empleados (Actualizado incluyendo fk_rol)
 INSERT INTO empleados (fk_tipo_documento, fk_rol, cod_empleado, numero_documento, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido) VALUES 

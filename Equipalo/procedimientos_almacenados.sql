@@ -21,7 +21,7 @@ BEGIN
   segundo_nombre, primer_apellido,segundo_apellido);
 END;
 
-$$
+/*$$
 CREATE PROCEDURE crearDispositivo(
 	id_dispositivo INT,
     cod_dispositivo VARCHAR(20) ,
@@ -32,7 +32,7 @@ BEGIN
     cod_dispositivo ,
     nombre_dispositivo );
 END;
-
+*/
 $$
 CREATE PROCEDURE crearDispositivo(
 	id_dispositivo INT,

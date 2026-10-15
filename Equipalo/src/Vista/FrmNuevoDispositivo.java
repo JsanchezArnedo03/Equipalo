@@ -4,6 +4,12 @@
  */
 package Vista;
 
+import Entities.Dispositivos;
+import Service.DispositivoService;
+import Service.TipoDispositivoService;
+import java.util.List;
+import javax.swing.JComboBox;
+
 /**
  *
  * @author jssa3
@@ -13,11 +19,17 @@ public class FrmNuevoDispositivo extends javax.swing.JFrame {
     /**
      * Creates new form FrmNuevoDispositivo
      */
-    private String numeroDocumento;
-    
+    private final String numeroDocumento;
+    private final TipoDispositivoService tipoDispositivoService;
+    private final DispositivoService dispositivoService;
+
     public FrmNuevoDispositivo(String documento) {
         initComponents();
+        dispositivoService = new DispositivoService();
+        tipoDispositivoService = new TipoDispositivoService();
         this.numeroDocumento = documento;
+        cargarComboBox(jcTipoDispositivo);
+
     }
 
     /**
@@ -30,7 +42,10 @@ public class FrmNuevoDispositivo extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenu1 = new javax.swing.JMenu();
-        jButton1 = new javax.swing.JButton();
+        btnRegistrar = new javax.swing.JButton();
+        txtNombreDispositivo = new javax.swing.JTextField();
+        jcTipoDispositivo = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jmRegresar = new javax.swing.JMenuItem();
@@ -40,7 +55,16 @@ public class FrmNuevoDispositivo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Registrar");
+        btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
+
+        jcTipoDispositivo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECCIONE" }));
+
+        jLabel1.setText("Nombre dispositivo");
 
         jMenu2.setText("Regresar");
 
@@ -65,15 +89,29 @@ public class FrmNuevoDispositivo extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(487, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRegistrar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(91, 91, 91)
+                        .addComponent(jcTipoDispositivo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtNombreDispositivo, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(73, 73, 73))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(215, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGap(68, 68, 68)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNombreDispositivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcTipoDispositivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
+                .addComponent(btnRegistrar)
                 .addGap(39, 39, 39))
         );
 
@@ -85,6 +123,21 @@ public class FrmNuevoDispositivo extends javax.swing.JFrame {
         FrmPrincipal principal = new FrmPrincipal(numeroDocumento);
         principal.setVisible(true);
     }//GEN-LAST:event_jmRegresarActionPerformed
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        Integer indexTipoDispositvo = jcTipoDispositivo.getSelectedIndex();
+        String nombreDispositivo = txtNombreDispositivo.getText().toUpperCase();
+
+        Dispositivos nuevoDispositivo = new Dispositivos();
+        dispositivoService.crearDispositivo(nuevoDispositivo);
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void cargarComboBox(JComboBox c) {
+        List<String> tipoDispositivos = tipoDispositivoService.getAllTipoDispositivo();
+        for (int i = 0; tipoDispositivos.size() > i; i++) {
+            c.addItem(tipoDispositivos.get(i));
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -123,11 +176,14 @@ public class FrmNuevoDispositivo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnRegistrar;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JComboBox<String> jcTipoDispositivo;
     private javax.swing.JMenuItem jmRegresar;
+    private javax.swing.JTextField txtNombreDispositivo;
     // End of variables declaration//GEN-END:variables
 }

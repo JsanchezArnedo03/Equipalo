@@ -28,6 +28,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private final String numeroDocumento;
     private final DispositivoRepository dispositivoService = new DispositivoRepository();
     private final SolicitudService solicitudService = new SolicitudService();
+    private final EmpleadoService empleadoService = new EmpleadoService();
 
     public FrmPrincipal(String documento) {
         initComponents();
@@ -220,9 +221,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         Date fechaSeleccionada = jcFechaSeleccionada.getDate();
         String fechaSeleccionadaFormateada = sdf.format(fechaSeleccionada);
-        if (!fechaSeleccionadaFormateada.equals(fechaActual)) {
-            JOptionPane.showMessageDialog(rootPane, "Dispositivo reservado correctamente", "CORRECTO!", JOptionPane.CLOSED_OPTION);
 
+        Integer indexDispositivo = jcDispositivos.getSelectedIndex() + 1;
+        System.out.println("index: " + indexDispositivo);
+        if (!fechaSeleccionadaFormateada.equals(fechaActual)) {
+            
+            /*if (crearSolicitud(dispositivoService, empleadoService.validarExistencia(numeroDocumento), dispositivoService.validarDisponibilidad(indexDispositivo),
+                    todayDate, fechaSeleccionada) != null) {
+                JOptionPane.showMessageDialog(rootPane, "Dispositivo reservado correctamente", "CORRECTO!", JOptionPane.CLOSED_OPTION);
+            }*/
         } else {
             JOptionPane.showMessageDialog(rootPane, "Error, el dia de debe solicitar los dispositivos con minimo 2 dias de anticipación", "", 2);
         }
@@ -232,14 +239,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
             Empleados empleado, Dispositivos dispositivo, Date fechaCracionSolicitud,
             Date fechaSolicitada) {
         Solicitudes nuevaSolicitud = new Solicitudes();
-        if (dispositivoService.validarDisponibilidad(dispositivo.getIdDispositivo())) {
-            
+        Dispositivos existe = dispositivoService.validarDisponibilidad(dispositivo.getIdDispositivo());
+        if (existe != null && existe.getEstadoDispositivo() != null && existe.getEstadoDispositivo().getIdEstadoDispositivo() == 1) {
+
             nuevaSolicitud.setCodSolicitud(codSolicitud);
             nuevaSolicitud.setDispositivoSolicitado(dispositivo);
             nuevaSolicitud.setEmpleadoSolicita(empleado);
             nuevaSolicitud.setFechaCreacionSolicitud(fechaCracionSolicitud);
             nuevaSolicitud.setFechaSolicitada(fechaSolicitada);
 
+            solicitudService.crearSolicitud(nuevaSolicitud);
+            JOptionPane.showMessageDialog(rootPane, "SOLICITUD CREADA CON EXITO!", "SUCCESFULL", 1);
         } else {
             JOptionPane.showMessageDialog(rootPane, "Error el dispositivo no esta disponible", "Error", 3);
         }

@@ -9,9 +9,28 @@ package Entities;
  * @author jssa3
  */
 public class Dispositivos {
+
     private Integer idDispositivo;
     private String codDispositivo;
     private String nombreDispositivo;
+    private TipoDispositivo tipoDispositivo;
+
+    public TipoDispositivo getTipoDispositivo() {
+        return tipoDispositivo;
+    }
+
+    public void setTipoDispositivo(TipoDispositivo tipoDispositivo) {
+        this.tipoDispositivo = tipoDispositivo;
+    }
+
+    public EstadoDispositivo getEstadoDispositivo() {
+        return estadoDispositivo;
+    }
+
+    public void setEstadoDispositivo(EstadoDispositivo estadoDispositivo) {
+        this.estadoDispositivo = estadoDispositivo;
+    }
+    private EstadoDispositivo estadoDispositivo;
 
     public Dispositivos() {
     }
@@ -39,5 +58,5 @@ public class Dispositivos {
     public void setNombreDispositivo(String nombreDispositivo) {
         this.nombreDispositivo = nombreDispositivo;
     }
-    
+
 }

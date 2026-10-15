@@ -4,6 +4,7 @@
  */
 package Service;
 
+import Entities.Dispositivos;
 import Repository.DispositivoRepository;
 
 /**
@@ -11,11 +12,30 @@ import Repository.DispositivoRepository;
  * @author jssa3
  */
 public class DispositivoService {
-    
+
     private final DispositivoRepository dispositivoRepository = new DispositivoRepository();
-    
-    public boolean validarDisponibilidad(Integer idDispositivo){
+
+    public boolean crearDispositivo(Dispositivos dispositivo) {
+        return dispositivoRepository.crearDispositivo(dispositivo);
+    }
+
+    public Dispositivos validarDisponibilidad(Integer idDispositivo) {
         return dispositivoRepository.validarDisponibilidad(idDispositivo);
     }
     
+
+    /*public String codificarDispositivo(String tipoDispositivo, String nombreDispositivo) {
+
+        String tipoDispositivoLimpio = tipoDispositivo.trim().replaceAll("\\s+", "").toUpperCase();
+        String nombreDispositivoLimpio = nombreDispositivo.trim().replaceAll("\\s+", "").toUpperCase();
+        if(nombreDispositivoLimpio){
+            
+        }
+        
+        String prefijo = tipoDispositivoLimpio.substring(0,1);
+        String sufijo = nombreDispositivoLimpio.substring(0,);
+        
+
+        return prefijo + "-" + middle;
+    }*/
 }
